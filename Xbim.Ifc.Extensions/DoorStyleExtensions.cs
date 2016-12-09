@@ -24,12 +24,16 @@ namespace Xbim.Ifc2x3.Extensions
     {
         public static IfcDoorLiningProperties GetDoorLiningProperties(this IfcDoorStyle doorStyle)
         {
-            return doorStyle.HasPropertySets.OfType<IfcDoorLiningProperties>().FirstOrDefault();
+            var propertySets = doorStyle.HasPropertySets;
+            return propertySets != null ? propertySets.OfType<IfcDoorLiningProperties>().FirstOrDefault() : null;
         }
 
         public static IEnumerable<IfcDoorPanelProperties> GetDoorPanelProperties(this IfcDoorStyle doorStyle)
         {
-            return doorStyle.HasPropertySets.OfType<IfcDoorPanelProperties>();
+            var propertySets = doorStyle.HasPropertySets;
+            return propertySets != null 
+                ? propertySets.OfType<IfcDoorPanelProperties>() 
+                : new IfcDoorPanelProperties[0];
         }
     }
 }
