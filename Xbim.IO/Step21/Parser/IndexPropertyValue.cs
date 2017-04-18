@@ -87,7 +87,9 @@ namespace Xbim.IO.Parser
         {
             get
             {
-                if (_parserType == StepParserType.Real) return _double;
+                if (_parserType == StepParserType.Integer) return Convert.ToDouble(_long);
+                if (_parserType == StepParserType.Real || _parserType == StepParserType.HexaDecimal) 
+                    return _double;
                 throw new Exception(string.Format("Wrong parameter type, found {0}, expected {1}",
                                                   _parserType.ToString(), "Real"));
             }
