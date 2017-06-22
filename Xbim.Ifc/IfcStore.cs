@@ -1230,23 +1230,28 @@ namespace Xbim.Ifc
                 break;
             }
 
-            //check if angle units are incorrectly defined, this happens in some old models
-            if (Math.Abs(angleToRadiansConversionFactor - 1) < 1e-10)
-            {
-                var trimmed = Instances.Where<IIfcTrimmedCurve>(trimmedCurve => trimmedCurve.BasisCurve is IIfcConic);
-                foreach (var trimmedCurve in trimmed)
-                {
-                    if (trimmedCurve.MasterRepresentation != IfcTrimmingPreference.PARAMETER)
-                        continue;
-                    if (
-                        !trimmedCurve.Trim1.Concat(trimmedCurve.Trim2)
-                            .OfType<IfcParameterValue>()
-                            .Select(trim => (double)trim.Value)
-                            .Any(val => val > Math.PI * 2)) continue;
-                    angleToRadiansConversionFactor = Math.PI / 180;
-                    break;
-                }
-            }
+            // Pyatkov 22.06.2017: 
+            // Renga Architecture generates formally correct IFC-files with radian trim parameters in a range of approximately [-1;10] 
+            // (range is estimated from the analysis of four ifc-models).
+            // to the generation of an incorrect geometry.
+            //
+            ////check if angle units are incorrectly defined, this happens in some old models
+            //if (Math.Abs(angleToRadiansConversionFactor - 1) < 1e-10)
+            //{
+            //	var trimmed = Instances.Where<IIfcTrimmedCurve>(trimmedCurve => trimmedCurve.BasisCurve is IIfcConic);
+            //	foreach (var trimmedCurve in trimmed)
+            //	{
+            //		if (trimmedCurve.MasterRepresentation != IfcTrimmingPreference.PARAMETER)
+            //			continue;
+            //		if (
+            //			!trimmedCurve.Trim1.Concat(trimmedCurve.Trim2)
+            //				.OfType<IfcParameterValue>()
+            //				.Select(trim => (double)trim.Value)
+            //				.Any(val => val > Math.PI * 2)) continue;
+            //		angleToRadiansConversionFactor = Math.PI / 180;
+            //		break;
+            //	}
+            //}
 
             ModelFactors.Initialise(angleToRadiansConversionFactor, lengthToMetresConversionFactor,
                 defaultPrecision);
