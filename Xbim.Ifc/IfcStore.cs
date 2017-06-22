@@ -1233,6 +1233,7 @@ namespace Xbim.Ifc
             // Pyatkov 22.06.2017: 
             // Renga Architecture generates formally correct IFC-files with radian trim parameters in a range of approximately [-1;10] 
             // (range is estimated from the analysis of four ifc-models).
+            // This block of code incorrectly forces those values to be reinterpreted as degerees, which leads
             // to the generation of an incorrect geometry.
             //
             ////check if angle units are incorrectly defined, this happens in some old models
